@@ -3,9 +3,9 @@
         <title>Flask-SQLAlchemy</title>
     </head>
     <body>
-        {%for user in users%}
-        <h1>{{user.username}}</h1>
-        <p>{{user.email}}</p>
+        {%for product in products%}
+        <h1>{{product.name}}</h1>
+        <p>{{product.description}}</p>
         {%endfor%}
     </body>
 </html>

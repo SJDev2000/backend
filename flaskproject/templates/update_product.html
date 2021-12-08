@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+
+    <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" href="qfc-dark.css">
+    <!-- <link rel="stylesheet" href="qfc-light.css"> -->
+
+    </head>
+
+    <body>
+    <div class="qfc-container">
+        <h2>Add Product</h2>
+        <label></label>
+        <form>
+        <div>
+            <div>
+                <input placeholder="Product Name" type="text" required>
+            </div>
+            <div>
+                <input placeholder="Model No." type="text" required>
+            </div>
+
+            <div>
+                <input placeholder="Price" type="number" required>
+            </div>
+           
+            <div>
+            <!-- <label>Product Type</label> -->
+            <select id>
+                            <option disabled selected value="--">Select Product Type</option>
+                            <option value="Laptop">Laptop</option>
+                            <option value="Mobile">Mobile</option>
+                            <option value="Headphone">Headphone</option>
+                            <option value="Keyboard">Keyboard</option>
+                            <option value="Mouse">Mouse</option>
+                        </select>
+            </div>
+            
+            <div>
+            <!-- <label>Product Description</label> -->
+            <div>
+                <textarea placeholder="Type Product Description here"></textarea>
+            </div>
+            </div>
+            <div>
+            <br>
+            <label>    Product Image</label>
+           
+            <div>
+                <input type="file" id>
+            </div>
+            </div>
+            <div>
+                <input type="checkbox" checked="checked">
+                <label>Agree terms and conditions</label>
+            </div>
+            <div>
+            <button type="submit">Submit</button>
+            </div>
+        </div>
+        </form>
+    </div>
+    </body>
+    
+</html>

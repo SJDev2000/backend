@@ -4,15 +4,16 @@ from flask.json import jsonify
 from flask.templating import render_template
 from werkzeug.utils import redirect
 import hashlib
-from flaskproject.models import UserDetails, Admins
+from flaskproject.models import UserDetails, Admins , Products
 from datetime import datetime, timedelta
 import jwt
 from flaskproject.decorator import token_required
 
 @app.route('/')
 def home():
-    users = UserDetails.query.all()
-    return render_template('index.html',users = users)
+    products = Products.query.all()
+    return render_template('userHome.html',products = products)
+    
 
 @app.route('/register', methods= ["POST", "GET"])
 def register():
@@ -65,5 +66,19 @@ def admin():
             return "Invalid email or password"
         token = jwt.encode({'user':result.email, 'exp': datetime.utcnow()+timedelta(minutes=15)}, app.config['SECRET_KEY'])
         session["jwt"] = token
-        return redirect(url_for('admin_dashboard'))
+        return redirect(url_for('formsuccess'))
     return render_template("admin_login.html")
+
+@app.route("/formsuccess", methods=["GET", "POST"])
+def success():
+    if request.method =="POST":
+        prod_name = request.form['name']
+        price = request.form['price']
+        category = request.form['category']
+        desc = request.form['description']
+        image = request.form['image']
+        new_product = Products(description=desc,price=price, name=prod_name, image=image, category=category)
+        db.session.add(new_product)
+        db.session.commit()
+        return render_template("userHome.html")
+    return render_template("addProduct.html")
