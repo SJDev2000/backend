@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 import jwt
 from flaskproject.decorator import token_required
 
-@app.route('/')
+@app.route('/home')
 def home():
     products = Products.query.all()
     return render_template('userHome.html',products = products)
@@ -51,10 +51,20 @@ def login():
 def dashboard(current_user):
     return render_template('dashboard.html', data=current_user)
 
-@app.route('/admin_dashboard')
+@app.route('/admin_dashboard', methods=["GET","POST"])
 @token_required
 def admin_dashboard(current_user):
-    return render_template('admin_dashboard.html')
+    if request.method =="POST":
+          prod_name = request.form['name']
+          price = request.form['price']
+          category = request.form['category']
+          desc = request.form['description']
+          image = request.form['image']
+          new_product = Products(description=desc,price=price, name=prod_name, image=image, category=category)
+          db.session.add(new_product)
+          db.session.commit()
+          return redirect(url_for("home"))
+    return render_template('addProduct.html', data = current_user)
 
 @app.route('/admin', methods=["GET", "POST"])
 def admin():
@@ -66,19 +76,5 @@ def admin():
             return "Invalid email or password"
         token = jwt.encode({'user':result.email, 'exp': datetime.utcnow()+timedelta(minutes=15)}, app.config['SECRET_KEY'])
         session["jwt"] = token
-        return redirect(url_for('formsuccess'))
+        return redirect(url_for('admin_dashboard'))
     return render_template("admin_login.html")
-
-@app.route("/formsuccess", methods=["GET", "POST"])
-def success():
-    if request.method =="POST":
-        prod_name = request.form['name']
-        price = request.form['price']
-        category = request.form['category']
-        desc = request.form['description']
-        image = request.form['image']
-        new_product = Products(description=desc,price=price, name=prod_name, image=image, category=category)
-        db.session.add(new_product)
-        db.session.commit()
-        return render_template("userHome.html")
-    return render_template("addProduct.html")
