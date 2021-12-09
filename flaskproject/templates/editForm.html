@@ -10,23 +10,23 @@
 
     <body>
     <div class="qfc-container">
-        <h2>Add Product</h2>
+        <h2>Edit Details for Product Id: {{product_id}}</h2>
         <label></label>
         <form action="#" method="post">
         <div>
+           
             <div>
-                <input name="name" placeholder="Product Name" type="text" required>
+                <input name="name" placeholder="Product Name" type="text" >
             </div>
 
             <div>
-                <input name="price" placeholder="Price" type="number" required>
+                <input name="price" placeholder="Price" type="number" >
             </div>
            
             <div>
             <!-- <label>Product Type</label> -->
             <select name="category">
-                            <option disabled selected value="--">Select Product Type</option>
-                            <option value="Laptop">Laptop</option>
+                            <option value="Laptop" selected>Laptop</option>
                             <option value="Mobile">Mobile</option>
                             <option value="Other">Others</option>
                         </select>
@@ -39,7 +39,7 @@
             </div>
             </div>
             <div>
-                <input name="image" placeholder="Link for Item Image" type="text" required>
+                <input name="image" placeholder="Link for Item Image" type="text">
             </div>
             <div>
             <button type="submit">Submit</button>

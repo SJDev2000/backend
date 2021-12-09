@@ -1,3 +1,4 @@
+from os import name
 from flaskproject import app, db
 from flask import request, session, url_for, make_response
 from flask.json import jsonify
@@ -9,26 +10,36 @@ from datetime import datetime, timedelta
 import jwt
 from flaskproject.decorator import token_required
 
-@app.route('/home')
+@app.route('/')
 def home():
     products = Products.query.all()
     return render_template('userHome.html',products = products)
 
 @app.route('/mobiles')
-def mobile():
+@token_required
+def mobile(current_user):
     products = Products.query.all()
-    return render_template('mobiles.html',products = products)
+    return render_template('mobiles.html',products = products,data=current_user)
 
 @app.route('/others')
-def other():
+@token_required
+def other(current_user):
     products = Products.query.all()
-    return render_template('others.html',products = products)
+    return render_template('others.html',products = products,data=current_user)
 
 @app.route('/laptops')
-def laptop():
+@token_required
+def laptop(current_user):
     products = Products.query.all()
-    return render_template('laptops.html',products = products)
+    return render_template('laptops.html',products = products,data=current_user)
     
+@app.route('/logout')
+@token_required
+def logout(current_user):
+    products=Products.query.all()
+    session.pop("jwt")
+    session.clear()
+    return render_template('userHome.html',products=products)
 
 @app.route('/register', methods= ["POST", "GET"])
 def register():
@@ -61,14 +72,24 @@ def login():
         return redirect(url_for('dashboard'))
     return render_template("login.html")
 
+# @app.route('/editProduct')
+# @token_required
+# def editProd(current_user):
+#     products = Products.query.all()
+    
+#     return render_template('editProduct.html', data=current_user,products=products)
+
 @app.route('/dashboard')
 @token_required
 def dashboard(current_user):
-    return render_template('dashboard.html', data=current_user)
+    products = Products.query.all()
+    
+    return render_template('dashboard.html', data=current_user,products=products)
+    
 
-@app.route('/admin_dashboard', methods=["GET","POST"])
+@app.route('/addProduct', methods=["GET","POST"])
 @token_required
-def admin_dashboard(current_user):
+def addProduct(current_user):
     if request.method =="POST":
           prod_name = request.form['name']
           price = request.form['price']
@@ -78,7 +99,7 @@ def admin_dashboard(current_user):
           new_product = Products(description=desc,price=price, name=prod_name, image=image, category=category)
           db.session.add(new_product)
           db.session.commit()
-          return redirect(url_for("home"))
+          return render_template('admin_panel.html')
     return render_template('addProduct.html', data = current_user)
 
 @app.route('/admin', methods=["GET", "POST"])
@@ -91,5 +112,54 @@ def admin():
             return "Invalid email or password"
         token = jwt.encode({'user':result.email, 'exp': datetime.utcnow()+timedelta(minutes=15)}, app.config['SECRET_KEY'])
         session["jwt"] = token
-        return redirect(url_for('admin_dashboard'))
+        return render_template('admin_panel.html')
     return render_template("admin_login.html")
+
+
+@app.route('/shipping/<product_id>',methods=["GET","POST"])
+def shipping(product_id):
+    if request.method=="POST":
+        return render_template("Thanks.html")
+        
+    print(product_id)
+    product=Products.query.all()
+    for p in product:
+        print(p.id)
+        if int(p.id)==int(product_id):
+            return render_template('shipping.html',product=p)
+        
+    return "Error"
+
+# @app.route('/editForm/<product_id>',methods=["GET","POST"])
+# def editForm(product_id):
+#     if request.method =="POST":
+#         prod_name = request.form['name']
+#         price = request.form['price']
+#         category = request.form['category']
+#         desc = request.form['description']
+#         image = request.form['image']
+#         product=Products.query.all()
+#         for p in product:
+#             print(p.id)
+#             if int(p.id)==int(product_id):
+#                 if image!=None:
+#                     p.image=image            
+                  
+#                 if desc!=None:
+#                     p.description=desc
+                  
+#                 if prod_name!=None:
+#                     p.name=prod_name
+                      
+#                 if category!=None:
+#                     p.category=category
+                  
+#                 if price!=None:
+#                     p.price=price
+                
+#                 db.session.commit()
+                
+#                 return render_template('admin_panel.html')
+    
+#     return render_template("editForm.html",product_id=product_id)
+

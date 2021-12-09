@@ -14,7 +14,7 @@
 
 
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="/">Electronix Store</a>
+    <a class="navbar-brand" href="/dashboard">Electronix Store</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -30,24 +30,32 @@
           <a class="nav-link" href="/others">Others</a>
         </li>
         <li id="log">
+        {%if data==null%}
+        
         <a href="/login"><button type="submit" class="btn btn-dark">Login</button></a>
         <a href="/register"><button type="submit" class="btn btn-dark">Register</button></a>
+        
+        {%else%}
+        <h5 style="margin-top:10px;"> Welcome </h1>
+        <a href="/logout"><button type="submit" class="btn btn-dark" style="margin-left:20px;">Logout</button></a>
+        {%endif%}
         </li>
       </ul>
     </div>
   </nav>
 
-  <div class="row" style="margin-top:200px" id="Items">
-
+  <div class="row" style="margin-top:50px; margin-bottom:50px" id="Items">
+      <h3 style="display:flex; justify-content:space-around; color:white;">Here is the epic collection of electronic accessories for you.</h3>
   </div>
 <div class="container">
   <div class="row justify-content-md-center">
           {%for product in products%}
           {% if product.category=="Other"%}
-        <div class="col-lg-3 col-md-3 border" id="item">
-        <h1>{{product.name}}</h1>
+        <div class="col-lg-3 col-md-3" id="item">
+        <a href="/shipping/{{product.id}}" id="link"><h1>{{product.name}}</h1></a>
         <p>{{product.description}}</p>
         <img src="{{product.image}}" width="220px" height="180px" id="photo">
+        <p>₹{{product.price}}</p>
         </div>
         {%endif%}
         {%endfor%}

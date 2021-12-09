@@ -15,7 +15,7 @@ body{
 .field_email,
 .field_password{
     position: absolute;
-    top: 50%;
+    top: 30%;
     left: 50%;
     transform: translate(-50%,-50%);
     height: 50px;
