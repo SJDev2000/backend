@@ -13,6 +13,21 @@ from flaskproject.decorator import token_required
 def home():
     products = Products.query.all()
     return render_template('userHome.html',products = products)
+
+@app.route('/mobiles')
+def mobile():
+    products = Products.query.all()
+    return render_template('mobiles.html',products = products)
+
+@app.route('/others')
+def other():
+    products = Products.query.all()
+    return render_template('others.html',products = products)
+
+@app.route('/laptops')
+def laptop():
+    products = Products.query.all()
+    return render_template('laptops.html',products = products)
     
 
 @app.route('/register', methods= ["POST", "GET"])

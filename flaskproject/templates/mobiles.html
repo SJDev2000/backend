@@ -43,12 +43,13 @@
 <div class="container">
   <div class="row justify-content-md-center">
           {%for product in products%}
-          
+          {% if product.category=="Mobile"%}
         <div class="col-lg-3 col-md-3 border" id="item">
         <h1>{{product.name}}</h1>
         <p>{{product.description}}</p>
         <img src="{{product.image}}" width="220px" height="180px" id="photo">
         </div>
+        {%endif%}
         {%endfor%}
     </div>
 </div>
