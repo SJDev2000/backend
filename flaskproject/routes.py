@@ -5,7 +5,7 @@ from flask.json import jsonify
 from flask.templating import render_template
 from werkzeug.utils import redirect
 import hashlib
-from flaskproject.models import UserDetails, Admins , Products
+from flaskproject.models import UserDetails, Admins , Products,Cart
 from datetime import datetime, timedelta
 import jwt
 from flaskproject.decorator import token_required
@@ -129,6 +129,27 @@ def shipping(product_id):
             return render_template('shipping.html',product=p)
         
     return "Error"
+
+@app.route('/addCart/<product_id>')
+@token_required
+def addCart(current_user,product_id):
+    user=UserDetails.query.all()
+    for u in user:
+        if u.email==current_user:
+            user_id=u.id
+         
+    new_item=Cart(user_id=user_id,product_id=product_id,qty=1)
+    db.session.add(new_item)
+    db.session.commit()
+    
+    return redirect(url_for('dashboard'))
+    
+@app.route('/cart')
+@token_required
+def cart(current_user):
+    item=Cart.query.first()
+    return render_template('cart.html',item=item)
+
 
 # @app.route('/editForm/<product_id>',methods=["GET","POST"])
 # def editForm(product_id):

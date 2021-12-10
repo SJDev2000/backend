@@ -36,6 +36,7 @@
         <a href="/register"><button type="submit" class="btn btn-dark">Register</button></a>
         
         {%else%}
+        <a href="/cart"><button type="submit" class="btn btn-dark" style="margin-left:20px;">Cart</button></a>
         <h5 style="margin-top:10px;"> Welcome </h1>
         <a href="/logout"><button type="submit" class="btn btn-dark" style="margin-left:20px;">Logout</button></a>
         {%endif%}
@@ -52,10 +53,13 @@
           {%for product in products%}
         
         <div class="col-lg-3 col-md-3" id="item">
-        <a href="/shipping/{{product.id}}" id="link"><h1>{{product.name}}</h1></a>
+        <h1>{{product.name}}</h1>
         <p>{{product.description}}</p>
         <img src="{{product.image}}" width="220px" height="180px" id="photo">
+        <div class="cart">
         <p>₹{{product.price}}</p>
+        <a href="/addCart/{{product.id}}"><button class="btn btn-light">Add to Cart</button></a>
+        </div>
         </div>
         
         {%endfor%}
